@@ -1,0 +1,42 @@
+-- Educational Noclip Script (Anti-Hit via Collision Disable)
+-- Toggle with 'X' key. For learning purposes only.
+-- Works universally by targeting local character parts.
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local noclip = false
+local noclipKey = Enum.KeyCode.X  -- Change to another key if desired
+
+-- Function to toggle noclip
+local function toggleNoclip()
+    noclip = not noclip
+    if noclip then
+        print("Noclip enabled (Educational mode)")
+    else
+        print("Noclip disabled")
+    end
+end
+
+-- Bind key press to toggle
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == noclipKey then
+        toggleNoclip()
+    end
+end)
+
+-- Main loop: Disable collision on character parts when active
+RunService.RenderStepped:Connect(function()
+    if noclip and player.Character then
+        for _, part in pairs(player.Character:GetDescendants()) do
+            if part:IsA("BasePart") and part ~= player.Character.HumanoidRootPart then
+                part.CanCollide = false
+            end
+        end
+    end
+end)
+
+print("Educational Noclip Script Loaded! Press 'X' to toggle. Remember: For learning only!")
